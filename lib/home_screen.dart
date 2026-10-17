@@ -8,7 +8,6 @@ import 'app_layout.dart';
 import 'app_bottom_navigation.dart';
 import 'ios_dialogs.dart';
 import 'liquid_glass.dart';
-import 'liquid_tab_bar.dart';
 import 'core_bridge.dart';
 import 'catalog_filters.dart';
 import 'catalog_browser.dart';
@@ -64,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _categorySelections = <String, String>{};
   late final CatalogBrowser _browser;
   bool _searchVisible = false;
-  // 勾选后并发搜索所有可见站源并归一去重，取消勾选只搜索当前站源。
+  // 勾选后并发搜索当前构建可用的全部站源并归一去重，取消勾选只搜索当前站源。
   bool _crossSourceSearch = false;
   bool _categoriesLoading = false;
   String? _categoriesError;
@@ -80,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _openingPlayback = false;
 
   List<SourceGroup> get _sourceGroups {
-    // 首页只显示「源显示列表」中开启的站源，被隐藏的站源不出现在分组里。
+    // 首页默认展示当前构建与用户权限允许的全部站源。
     final visible = widget.store.visibleSources;
     final groups = SourceGroup.fromSources(visible);
     return [
@@ -101,14 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
         return SourceGroup(site.groupId, site.groupName, [site]);
       })();
   bool get _onlineSearch => _group.sources.any((source) => source.onlineSearch);
-  // 跨源聚合搜索打的是站源管理里勾选显示的可见源，被隐藏的源不参与。
+  // 跨源聚合搜索覆盖当前构建与用户权限允许的全部站源。
   List<String> get _visibleSourceIds => [
     for (final source in widget.store.visibleSources) source.id,
   ];
-  // 勾选跨源后，即便当前分组本身不支持在线搜索，也按全部可见源发起在线搜索。
+  // 勾选跨源后，即便当前分组本身不支持在线搜索，也按全部可用源发起在线搜索。
   // 自定义源在 Dart 侧 onlineSearch 恒为 false，但 Go 侧 searchAcross 能识别
   // custom:* 源并并发搜索，不支持搜索的源会被静默跳过；是否真有结果由 Go 判定，
-  // 故这里只看「有没有可见源」，不再用 source.onlineSearch 过滤。
+  // 故这里只看「有没有可用源」，不再用 source.onlineSearch 过滤。
   bool get _canSearchOnline =>
       _onlineSearch || (_crossSourceSearch && _visibleSourceIds.isNotEmpty);
   bool get _searchSuggestions =>
@@ -344,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (!mounted) return;
-    // 站源显示列表可能变了：当前源被隐藏时落到第一个可见站源。
+    // 当前源不可用时自动切换到第一个可用站源。
     final next = SourceSite.byId(widget.store.source);
     if (next.id != _source.id) {
       setState(() {
@@ -1349,10 +1348,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: _tab == 0
                       ? widget.store.visibleSources.isEmpty
                             ? StatusPanel(
-                                title: '暂无显示中的站源',
-                                message: widget.store.sources.isEmpty
-                                    ? '请联系管理员为当前用户开放站源。'
-                                    : '所有站源已在「源显示列表」中关闭，请到站源管理中重新开启。',
+                                title: '暂无可用站源',
+                                message: '请联系管理员为当前用户开放站源。',
                               )
                             : _catalog(selectionInBody: desktop || television)
                       : _tab == 3
@@ -1386,48 +1383,27 @@ class _HomeScreenState extends State<HomeScreen> {
               ? null
               : _selectionMode
               ? _selectionBar()
-              : glass
-              ? LiquidTabBar(
-                  selectedIndex: _tab,
-                  onSelected: _changeTab,
-                  items: [
-                    const LiquidTabItem(icon: LucideIcons.compass, label: '发现'),
-                    const LiquidTabItem(
-                      icon: LucideIcons.bookmark,
-                      selectedIcon: LucideIcons.bookmarkCheck,
-                      label: '追剧',
-                    ),
-                    const LiquidTabItem(
-                      icon: LucideIcons.history,
-                      label: '最近观看',
-                    ),
-                    if (widget.store.canDownload)
-                      const LiquidTabItem(
-                        icon: LucideIcons.arrowDownToLine,
-                        label: '下载',
-                      ),
-                  ],
-                )
               : AppBottomNavigation(
                   selectedIndex: _tab,
                   onDestinationSelected: _changeTab,
                   destinations: [
                     NavigationDestination(
-                      icon: Icon(Icons.explore_outlined),
-                      selectedIcon: Icon(Icons.explore),
+                      icon: const Icon(Icons.explore_outlined),
+                      selectedIcon: const Icon(Icons.explore_rounded),
                       label: '发现',
                     ),
                     NavigationDestination(
-                      icon: Icon(Icons.bookmark_border_rounded),
-                      selectedIcon: Icon(Icons.bookmark_rounded),
+                      icon: const Icon(Icons.bookmark_border_rounded),
+                      selectedIcon: const Icon(Icons.bookmark_rounded),
                       label: '追剧',
                     ),
-                    NavigationDestination(
+                    const NavigationDestination(
                       icon: Icon(Icons.history_rounded),
+                      selectedIcon: Icon(Icons.history_rounded),
                       label: '最近观看',
                     ),
                     if (widget.store.canDownload)
-                      NavigationDestination(
+                      const NavigationDestination(
                         icon: Icon(Icons.download_outlined),
                         selectedIcon: Icon(Icons.download_rounded),
                         label: '下载',

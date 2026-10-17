@@ -139,39 +139,13 @@ class LocalStore extends ChangeNotifier {
     return [...builtIn, ...custom];
   }
 
-  /// 当前用户被隐藏、不首页显示的站源 id 集合（含内置与自定义站源）。
-  /// 从未在「源显示列表」里配置过时，落到内置默认隐藏集
-  /// （默认可见：红果、韩小圈、鬼片、A123、爱看机器人），
-  /// 用户配置过则以存档值为准。
-  Set<String> get hiddenSites {
-    if (locked) return const {};
-    return _effectiveHiddenSites(_current);
-  }
+  Set<String> get hiddenSites => const {};
 
-  Set<String> _effectiveHiddenSites(String profileId) {
-    final raw = _string(_key('hiddenSites', profileId));
-    if (raw == null) {
-      // 从未在「源显示列表」里配置过（新用户）：落到内置默认隐藏集。
-      return Set<String>.of(SourceSite.defaultHiddenSiteIds);
-    }
-    try {
-      final stored = jsonDecode(raw);
-      if (stored is List) {
-        // 用户配置过（含手动设为全部可见的空列表）：以存档值为准。
-        return stored.whereType<String>().toSet();
-      }
-    } catch (_) {}
-    // 存档损坏：同样落到默认隐藏集，避免退化为全可见。
-    return Set<String>.of(SourceSite.defaultHiddenSiteIds);
-  }
+  Set<String> _effectiveHiddenSites(String profileId) => const {};
 
-  bool siteVisible(String source) => !hiddenSites.contains(source);
+  bool siteVisible(String source) => true;
 
-  /// 首页与各站源分组消费的可见站源列表。
-  List<SourceSite> get visibleSources {
-    final hidden = hiddenSites;
-    return sources.where((site) => !hidden.contains(site.id)).toList();
-  }
+  List<SourceSite> get visibleSources => sources;
 
   Future<void> setSiteVisible(String source, bool visible) {
     final epoch = _epoch;
@@ -190,6 +164,7 @@ class LocalStore extends ChangeNotifier {
       _notify();
     });
   }
+
   List<CustomSourceSite> get customSources => List.unmodifiable(_customSources);
 
   void _loadCustomSources() {
