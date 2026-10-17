@@ -1,5 +1,5 @@
 # 发布工作流：把某次 "Build app packages" 运行的全部安装包发布到同一个 GitHub Release。
-# 短剧视界（duanjushijie）与全剧视界（quanjushijie）都必须产出，缺少任一版本时发布失败。
+# 当前只构建全剧视界（quanjushijie）安卓 arm64 版，缺少时发布失败。
 name: Publish release
 
 on:
@@ -75,10 +75,10 @@ jobs:
             -exec cp -f {} packages/ \;
           ls -l packages
 
-      - name: Verify both editions are present
+      - name: Verify quanjushijie package is present
         run: |
           missing=0
-          for edition in duanjushijie quanjushijie; do
+          for edition in quanjushijie; do
             count=$(find packages -maxdepth 1 -type f -name "$edition-*" | wc -l)
             if [ "$count" -eq 0 ]; then
               echo "::error::$edition 没有可发布的构建产物"
@@ -97,11 +97,11 @@ jobs:
           TAG: ${{ steps.tag.outputs.tag }}
         run: |
           if gh release view "$TAG" -R ${{ github.repository }} > /dev/null 2>&1; then
-            gh release edit "$TAG" -R ${{ github.repository }} --title "短剧视界 / 全剧视界 $TAG"
+            gh release edit "$TAG" -R ${{ github.repository }} --title "全剧视界 $TAG"
           else
             gh release create "$TAG" -R ${{ github.repository }} \
-              --title "短剧视界 / 全剧视界 $TAG" \
-              --notes "短剧视界（duanjushijie）与全剧视界（quanjushijie）的 Android APK、Windows x64 便携版与安装程序、macOS 压缩包、iOS 未签名 IPA。macOS 包未签名，首次打开需执行 xattr -dr com.apple.quarantine <应用>.app 移除隔离属性。"
+              --title "全剧视界 $TAG" \
+              --notes "全剧视界（quanjushijie）安卓 arm64 APK。"
           fi
           FILES=$(find packages -maxdepth 1 -type f | sort)
           if [ -z "$FILES" ]; then

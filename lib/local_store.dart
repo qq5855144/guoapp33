@@ -141,7 +141,7 @@ class LocalStore extends ChangeNotifier {
 
   /// 当前用户被隐藏、不首页显示的站源 id 集合（含内置与自定义站源）。
   /// 从未在「源显示列表」里配置过时，落到内置默认隐藏集
-  /// （默认可见：红果、韩小圈、鬼片、A123、爱看机器人），
+  /// （当前默认集为空：默认显示全部站源），
   /// 用户配置过则以存档值为准。
   Set<String> get hiddenSites {
     if (locked) return const {};
