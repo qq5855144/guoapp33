@@ -1409,6 +1409,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         label: '下载',
                       ),
                   ],
+                ),
         );
         if (!television && !_selectionMode) return scaffold;
         return PopScope(
