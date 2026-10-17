@@ -201,6 +201,38 @@ void main() {
     },
   );
 
+  testWidgets(
+    'all permitted sources stay visible without a source visibility settings page',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({
+        'hiddenSites': jsonEncode(['hongguo']),
+      });
+      final store = LocalStore(await SharedPreferences.getInstance());
+      expect(store.hiddenSites, isEmpty);
+      expect(
+        store.visibleSources.map((source) => source.id).toList(),
+        store.sources.map((source) => source.id).toList(),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SourcesScreen(
+            repository: SourceFixtureRepository(),
+            store: store,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('source-visibility-entry')),
+        findsNothing,
+      );
+      expect(find.text('源显示列表'), findsNothing);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+      store.dispose();
+    },
+  );
+
   for (final operation in ['check', 'checkCatalog']) {
     testWidgets(
       'source diagnostics remain collapsed through $operation polling and completion',
