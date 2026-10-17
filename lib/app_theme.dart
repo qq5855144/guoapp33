@@ -61,39 +61,41 @@ abstract final class AppTheme {
 
   static ThemeData _theme(Brightness brightness) {
     final dark = brightness == Brightness.dark;
-    final background = dark ? const Color(0xFF101114) : const Color(0xFFFAF8F6);
+    final background = dark
+        ? const Color(0xFF111420)
+        : const Color(0xFFF4F5FA);
     final scheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFFFF664F),
+      seedColor: const Color(0xFF7665EA),
       brightness: brightness,
-      primary: dark ? const Color(0xFFFF765F) : const Color(0xFFAD3826),
-      onPrimary: dark ? const Color(0xFF3B0E07) : Colors.white,
+      primary: dark ? const Color(0xFFAA9CFF) : const Color(0xFF5E4ACF),
+      onPrimary: Colors.white,
       primaryContainer: dark
-          ? const Color(0xFF5C3027)
-          : const Color(0xFFFFE0D8),
+          ? const Color(0xFF332D55)
+          : const Color(0xFFE8E4FF),
       onPrimaryContainer: dark
-          ? const Color(0xFFFFE0D8)
-          : const Color(0xFF4B160D),
-      tertiary: dark ? const Color(0xFFF6C86B) : const Color(0xFF805500),
-      surface: dark ? const Color(0xFF16171B) : Colors.white,
-      onSurface: dark ? const Color(0xFFF2F0F4) : const Color(0xFF252328),
+          ? const Color(0xFFE8E4FF)
+          : const Color(0xFF2D245E),
+      tertiary: dark ? const Color(0xFFF2C66D) : const Color(0xFF94610D),
+      surface: dark ? const Color(0xFF1B2030) : Colors.white,
+      onSurface: dark ? const Color(0xFFF6F4FF) : const Color(0xFF20233A),
       onSurfaceVariant: dark
-          ? const Color(0xFFB9B6C2)
-          : const Color(0xFF68636C),
-      outline: dark ? const Color(0xFF85818B) : const Color(0xFF7C757D),
-      outlineVariant: dark ? const Color(0xFF34343D) : const Color(0xFFE3DFDC),
-      surfaceContainerLowest: dark ? const Color(0xFF0D0E11) : Colors.white,
+          ? const Color(0xFFADB0C6)
+          : const Color(0xFF6D7188),
+      outline: dark ? const Color(0xFF555D78) : const Color(0xFFC8CDE0),
+      outlineVariant: dark ? const Color(0xFF30364A) : const Color(0xFFE1E4F0),
+      surfaceContainerLowest: dark ? const Color(0xFF0C0F18) : Colors.white,
       surfaceContainerLow: dark
-          ? const Color(0xFF191A20)
-          : const Color(0xFFF7F3F0),
+          ? const Color(0xFF151A27)
+          : const Color(0xFFF0F2F9),
       surfaceContainer: dark
-          ? const Color(0xFF1E2026)
-          : const Color(0xFFF2EEEB),
+          ? const Color(0xFF1B2030)
+          : const Color(0xFFE9ECF5),
       surfaceContainerHigh: dark
-          ? const Color(0xFF25262D)
-          : const Color(0xFFEDE8E5),
+          ? const Color(0xFF252B3E)
+          : const Color(0xFFE2E6F1),
       surfaceContainerHighest: dark
-          ? const Color(0xFF30313A)
-          : const Color(0xFFE6E0DC),
+          ? const Color(0xFF31384F)
+          : const Color(0xFFD8DDED),
       surfaceTint: Colors.transparent,
     );
     return ThemeData(
@@ -138,45 +140,47 @@ abstract final class AppTheme {
     final background = dark
         ? ios
               ? Colors.black
-              : const Color(0xFF101114)
-        : const Color(0xFFF7F6F4);
-    final primary = dark ? const Color(0xFFFF6D57) : const Color(0xFFD53A25);
-    final label = dark ? Colors.white : const Color(0xFF111113);
-    final secondary = dark ? const Color(0xFF9D9DA6) : const Color(0xFF6C6C72);
+              : const Color(0xFF111420)
+        : const Color(0xFFF4F5FA);
+    final primary = dark ? const Color(0xFFAA9CFF) : const Color(0xFF5E4ACF);
+    final label = dark ? const Color(0xFFF6F4FF) : const Color(0xFF20233A);
+    final secondary = dark
+        ? const Color(0xFFADB0C6)
+        : const Color(0xFF6D7188);
     final scheme = ColorScheme.fromSeed(
       seedColor: primary,
       brightness: brightness,
       primary: primary,
       onPrimary: Colors.white,
       primaryContainer: dark
-          ? const Color(0xFF4A1C15)
-          : const Color(0xFFFFE3DC),
+          ? const Color(0xFF332D55)
+          : const Color(0xFFE8E4FF),
       onPrimaryContainer: dark
-          ? const Color(0xFFFFDAD2)
-          : const Color(0xFF5A150B),
+          ? const Color(0xFFE8E4FF)
+          : const Color(0xFF2D245E),
       secondaryContainer: dark
-          ? const Color(0xFF2C2C2E)
-          : const Color(0xFFEDEBE8),
+          ? const Color(0xFF272B3B)
+          : const Color(0xFFE8EAF6),
       onSecondaryContainer: label,
-      tertiary: dark ? const Color(0xFFFFD166) : const Color(0xFF9A6A00),
-      surface: dark ? const Color(0xFF1C1C1E) : Colors.white,
+      tertiary: dark ? const Color(0xFFF2C66D) : const Color(0xFF94610D),
+      surface: dark ? const Color(0xFF1B2030) : Colors.white,
       onSurface: label,
       onSurfaceVariant: secondary,
-      outline: dark ? const Color(0xFF545458) : const Color(0xFFC6C6C8),
-      outlineVariant: dark ? const Color(0xFF2C2C2E) : const Color(0xFFE3E2E0),
-      surfaceContainerLowest: dark ? const Color(0xFF0B0B0C) : Colors.white,
+      outline: dark ? const Color(0xFF555D78) : const Color(0xFFC8CDE0),
+      outlineVariant: dark ? const Color(0xFF30364A) : const Color(0xFFE1E4F0),
+      surfaceContainerLowest: dark ? const Color(0xFF0C0F18) : Colors.white,
       surfaceContainerLow: dark
-          ? const Color(0xFF151517)
-          : const Color(0xFFF2F1EF),
+          ? const Color(0xFF151A27)
+          : const Color(0xFFF0F2F9),
       surfaceContainer: dark
-          ? const Color(0xFF1C1C1E)
-          : const Color(0xFFEDECEA),
+          ? const Color(0xFF1B2030)
+          : const Color(0xFFE9ECF5),
       surfaceContainerHigh: dark
-          ? const Color(0xFF2C2C2E)
-          : const Color(0xFFE5E4E2),
+          ? const Color(0xFF252B3E)
+          : const Color(0xFFE2E6F1),
       surfaceContainerHighest: dark
-          ? const Color(0xFF3A3A3C)
-          : const Color(0xFFDAD9D6),
+          ? const Color(0xFF31384F)
+          : const Color(0xFFD8DDED),
       surfaceTint: Colors.transparent,
     );
     const continuous = RoundedRectangleBorder(
@@ -297,11 +301,7 @@ abstract final class AppTheme {
         elevation: 0,
         margin: const EdgeInsets.symmetric(vertical: 5),
         color: dark ? const Color(0xFF1C1C1E) : Colors.white,
-        shape: ios
-            ? continuous
-            : const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
+        shape: continuous,
         clipBehavior: Clip.antiAlias,
       ),
       listTileTheme: ListTileThemeData(
